@@ -1,5 +1,5 @@
 -- INSERT Genres
-INSERT INTO genres (id, genre, total_likes, total_plays)
+INSERT INTO video_genres (id, genre, total_likes, total_plays)
 VALUES
     (1, 'Rock', 0, 0),
     (2, 'Heavy Metal', 0, 0)
