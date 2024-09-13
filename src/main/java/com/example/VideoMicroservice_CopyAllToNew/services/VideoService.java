@@ -1,11 +1,11 @@
 package com.example.VideoMicroservice_CopyAllToNew.services;
 
 import com.example.VideoMicroservice_CopyAllToNew.dto.VideoDTO;
+import com.example.VideoMicroservice_CopyAllToNew.entities.Album;
+import com.example.VideoMicroservice_CopyAllToNew.entities.Artist;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Video;
 import com.example.VideoMicroservice_CopyAllToNew.repositories.VideoRepository;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Album;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Artist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +20,16 @@ import java.util.Optional;
 @Service
 public class VideoService implements VideoServiceInterface {
     private VideoRepository videoRepository;
-    private RestTemplate restTemplate;
     private GenreService genreService;
+    private AlbumService albumService;
+    private ArtistService artistService;
 
     @Autowired
-    public VideoService(VideoRepository videoRepository, RestTemplate restTemplate, GenreService genreService) {
+    public VideoService(VideoRepository videoRepository, GenreService genreService, AlbumService albumService, ArtistService artistService) {
         this.videoRepository = videoRepository;
-        this.restTemplate = restTemplate;
         this.genreService = genreService;
+        this.albumService = albumService;
+        this.artistService = artistService;
     }
 
     @Override
@@ -129,24 +131,22 @@ public class VideoService implements VideoServiceInterface {
 
         // Check to see if album exist
         for (String albumName : videoDTO.getAlbumInputs()) {
-            ResponseEntity<Boolean> albumNameResponse = restTemplate.getForEntity("lb://album-service/album/exists/" + albumName, Boolean.class);
-
-            Boolean albumExist = albumNameResponse.getBody();
+            Boolean albumExist = albumService.checkIfAlbumExistsByName(albumName);
 
             if (!albumExist) {
-                ResponseEntity<Album> createAlbum = restTemplate.postForEntity("lb://album-service/album/createAlbum", new Album(albumName), Album.class);
+                Album album = new Album(albumName, "");
+                albumService.createAlbum(album);
             }
 
         }
 
         // Check to see if artist exist
         for (String artistName : videoDTO.getArtistInputs()) {
-            ResponseEntity<Boolean> artistNameResponse = restTemplate.getForEntity("lb://artist-service/artist/exists/" + artistName, Boolean.class);
-
-            Boolean artistExist = artistNameResponse.getBody();
+            Boolean artistExist = artistService.checkIfArtistExistByName(artistName);
 
             if (!artistExist) {
-                ResponseEntity<Artist> createArtist = restTemplate.postForEntity("lb://artist-service/artist/createArtist", new Artist(artistName), Artist.class);
+                Artist artist = new Artist(artistName);
+                artistService.createArtist(artist);
             }
         }
 
@@ -175,12 +175,12 @@ public class VideoService implements VideoServiceInterface {
 
     @Override
     public List<Album> getAllAlbums(VideoDTO videoDTO) {
-        ResponseEntity<Album[]> allAlbumsArray = restTemplate.getForEntity("lb://album-service/album/getAllAlbums", Album[].class);
+        List<Album> allAlbums = albumService.getAllAlbums();
 
         List<Album> albumList = new ArrayList<>();
 
-        if (allAlbumsArray != null) {
-            for (Album album : allAlbumsArray.getBody()) {
+        if (allAlbums != null) {
+            for (Album album : allAlbums) {
                 for (String albumName : videoDTO.getAlbumInputs()) {
                     if (albumName.toLowerCase().equals(album.getName().toLowerCase())) {
                         albumList.add(album);
@@ -194,10 +194,11 @@ public class VideoService implements VideoServiceInterface {
 
     @Override
     public List<Artist> getAllArtists(VideoDTO videoDTO) {
-        ResponseEntity<Artist[]> allArtistsArray = restTemplate.getForEntity("lb://artist-service/artist/getAllArtists", Artist[].class);
+        List<Artist> allArtists = artistService.getAllArtists();
+
         List<Artist> artistList = new ArrayList<>();
-        if (allArtistsArray != null) {
-            for (Artist artist : allArtistsArray.getBody()) {
+        if (allArtists != null) {
+            for (Artist artist : allArtists) {
                 for (String artistName : videoDTO.getArtistInputs()) {
                     if (artistName.toLowerCase().equals(artist.getName().toLowerCase())) {
                         artistList.add(artist);
