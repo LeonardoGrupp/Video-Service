@@ -73,4 +73,9 @@ public class VideoController {
     public ResponseEntity<String> disLikeVideo(@PathVariable("url") String url) {
         return ResponseEntity.ok(videoService.disLikeVideo(url));
     }
+
+    @GetMapping("/exists/{url}")
+    public ResponseEntity<Boolean> videoExist(@PathVariable("url") String url) {
+        return ResponseEntity.ok(videoService.checkIfVideoExistByUrl(url));
+    }
 }

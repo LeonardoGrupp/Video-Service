@@ -668,4 +668,31 @@ class VideoServiceTest {
         assertEquals("ERROR: video with URL not found", response.getReason(), "ERROR: Exceptions was not identical");
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode(), "ERROR: Status Codes was not identical");
     }
+
+    @Test
+    void checkIfVideoExistByUrlShouldReturnTrue() {
+        String url = "url";
+        Video video = new Video("title", "url", "release");
+
+        when(videoRepositoryMock.findVideoByUrl(url)).thenReturn(video);
+
+        Boolean response = videoService.checkIfVideoExistByUrl(url);
+
+        assertTrue(response, "ERROR: Response was false");
+
+        verify(videoRepositoryMock).findVideoByUrl(url);
+    }
+
+    @Test
+    void checkIfVideoExistByUrlShouldReturnFalse() {
+        String url = "url";
+
+        when(videoRepositoryMock.findVideoByUrl(url)).thenReturn(null);
+
+        Boolean response = videoService.checkIfVideoExistByUrl(url);
+
+        assertFalse(response, "ERROR: Response was true");
+
+        verify(videoRepositoryMock).findVideoByUrl(url);
+    }
 }

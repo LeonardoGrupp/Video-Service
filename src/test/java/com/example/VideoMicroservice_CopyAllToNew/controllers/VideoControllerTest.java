@@ -452,4 +452,30 @@ class VideoControllerTest {
 
         verify(videoServiceMock).disLikeVideo(url);
     }
+
+    @Test
+    void videoExistShouldReturnTrue() {
+        String url = "url";
+
+        when(videoServiceMock.checkIfVideoExistByUrl(url)).thenReturn(true);
+
+        ResponseEntity<Boolean> response = videoController.videoExist(url);
+
+        assertTrue(response.getBody(), "ERROR: Response was false");
+
+        verify(videoServiceMock).checkIfVideoExistByUrl(url);
+    }
+
+    @Test
+    void musicExistShouldReturnFalse() {
+        String url = "url";
+
+        when(videoServiceMock.checkIfVideoExistByUrl(url)).thenReturn(false);
+
+        ResponseEntity<Boolean> response = videoController.videoExist(url);
+
+        assertFalse(response.getBody(), "ERROR: Response was true");
+
+        verify(videoServiceMock).checkIfVideoExistByUrl(url);
+    }
 }

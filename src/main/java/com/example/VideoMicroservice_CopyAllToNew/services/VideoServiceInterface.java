@@ -24,4 +24,5 @@ public interface VideoServiceInterface {
     String playVideo(String url);
     String likeVideo(String url);
     String disLikeVideo(String url);
+    Boolean checkIfVideoExistByUrl(String url);
 }

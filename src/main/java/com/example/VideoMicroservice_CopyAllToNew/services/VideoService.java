@@ -300,4 +300,11 @@ public class VideoService implements VideoServiceInterface {
 
         return "Disliked " + videoToDisLike.getType() + ": " + videoToDisLike.getTitle();
     }
+
+    @Override
+    public Boolean checkIfVideoExistByUrl(String url) {
+        Video video = videoRepository.findVideoByUrl(url);
+
+        return video != null;
+    }
 }
