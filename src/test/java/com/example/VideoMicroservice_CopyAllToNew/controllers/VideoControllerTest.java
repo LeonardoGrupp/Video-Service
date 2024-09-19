@@ -4,8 +4,6 @@ import com.example.VideoMicroservice_CopyAllToNew.dto.VideoDTO;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
 import com.example.VideoMicroservice_CopyAllToNew.services.VideoService;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Video;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Album;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Artist;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;

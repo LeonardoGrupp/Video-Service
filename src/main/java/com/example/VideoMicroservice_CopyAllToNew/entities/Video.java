@@ -1,7 +1,5 @@
 package com.example.VideoMicroservice_CopyAllToNew.entities;
 
-import com.example.VideoMicroservice_CopyAllToNew.vo.Album;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Artist;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -34,17 +32,19 @@ public class Video {
     )
     private List<Genre> genres;
 
-    @ElementCollection
-    @CollectionTable(
+    @ManyToMany
+    @JoinTable(
             name = "videos_albums",
-            joinColumns = @JoinColumn(name = "videos_id")
+            joinColumns = @JoinColumn(name = "videos_id"),
+            inverseJoinColumns = @JoinColumn(name = "album_id")
     )
     private List<Album> albums;
 
-    @ElementCollection
-    @CollectionTable(
+    @ManyToMany
+    @JoinTable(
             name = "videos_artists",
-            joinColumns = @JoinColumn(name = "videos_id")
+            joinColumns = @JoinColumn(name = "videos_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
     )
     private List<Artist> artists;
 
