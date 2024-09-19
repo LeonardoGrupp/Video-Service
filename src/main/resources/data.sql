@@ -10,7 +10,15 @@ CREATE TABLE IF NOT EXISTS videos (
     )
 ;
 
-CREATE TABLE IF NOT EXISTS video_genres (
+-- CREATE TABLE IF NOT EXISTS video_genres (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     genre VARCHAR(255) NOT NULL,
+--     total_likes INT DEFAULT 0,
+--     total_plays INT DEFAULT 0
+--     )
+-- ;
+
+CREATE TABLE IF NOT EXISTS genres (
     id INT AUTO_INCREMENT PRIMARY KEY,
     genre VARCHAR(255) NOT NULL,
     total_likes INT DEFAULT 0,
@@ -18,11 +26,19 @@ CREATE TABLE IF NOT EXISTS video_genres (
     )
 ;
 
+-- CREATE TABLE IF NOT EXISTS videos_genres (
+--     videos_id INT,
+--     genre_id INT,
+--     FOREIGN KEY(videos_id) REFERENCES videos(id),
+--     FOREIGN KEY(genre_id) REFERENCES video_genres(id)
+--     )
+-- ;
+
 CREATE TABLE IF NOT EXISTS videos_genres (
     videos_id INT,
     genre_id INT,
     FOREIGN KEY(videos_id) REFERENCES videos(id),
-    FOREIGN KEY(genre_id) REFERENCES video_genres(id)
+    FOREIGN KEY(genre_id) REFERENCES genres(id)
     )
 ;
 
@@ -43,10 +59,17 @@ CREATE TABLE IF NOT EXISTS videos_albums (
 ;
 
 -- INSERT Genres
-INSERT INTO video_genres (id, genre, total_likes, total_plays)
+-- INSERT INTO video_genres (id, genre, total_likes, total_plays)
+-- VALUES
+--     (1, 'Rock', 0, 0),
+--     (2, 'Heavy Metal', 0, 0)
+-- ;
+
+-- INSERT Genres
+INSERT INTO genres (id, genre, total_likes, total_plays)
 VALUES
-    (1, 'Rock', 0, 0),
-    (2, 'Heavy Metal', 0, 0)
+    (19, 'Rock', 0, 0),
+    (20, 'Heavy Metal', 0, 0)
 ;
 
 INSERT INTO videos (id, type, title, url, release_date, play_counter, likes, dis_likes)
@@ -86,14 +109,14 @@ INSERT INTO videos_genres (videos_id, genre_id)
 VALUES
     -- VIDEOS
     -- Iron Maiden to Metal
-    (1, 2), (2, 2), (3, 2), (4, 2), (5, 2),
-    (6, 2), (7, 2), (8, 2), (9, 2), (10, 2),
-    (11, 2), (12, 2), (13, 2), (14, 2), (15, 2),
-    (16, 2), (17, 2), (18, 2),
+    (1, 20), (2, 20), (3, 20), (4, 20), (5, 20),
+    (6, 20), (7, 20), (8, 20), (9, 20), (10, 20),
+    (11, 20), (12, 20), (13, 20), (14, 20), (15, 20),
+    (16, 20), (17, 20), (18, 20),
 
     --Dire Straits
-    (19, 1), (20, 1), (21, 1), (22, 1), (23, 1),
-    (24, 1), (25, 1), (26, 1), (27, 1)
+    (19, 19), (20, 19), (21, 19), (22, 19), (23, 19),
+    (24, 19), (25, 19), (26, 19), (27, 19)
 ;
 
 -- INSERT Artists
