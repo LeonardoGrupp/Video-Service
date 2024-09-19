@@ -20,7 +20,7 @@ public class GenreController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Genre>> allGenres() {
+    public ResponseEntity<List<Genre>> getAllGenres() {
         return ResponseEntity.ok(genreService.findAllGenres());
     }
 

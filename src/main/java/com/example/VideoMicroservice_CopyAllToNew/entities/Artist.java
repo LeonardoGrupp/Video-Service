@@ -1,25 +1,31 @@
-package com.example.VideoMicroservice_CopyAllToNew.vo;
+package com.example.VideoMicroservice_CopyAllToNew.entities;
 
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 
-@Embeddable
-public class Album {
+@Entity
+public class Artist {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    // Attributes
     private String name;
 
-    public Album() {
+    // Constructors
+    public Artist() {
     }
 
-    public Album(String name) {
+    public Artist(String name) {
         this.name = name;
     }
 
-    public Album(long id, String name) {
+    public Artist(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
+    // Getters & Setters
     public long getId() {
         return id;
     }

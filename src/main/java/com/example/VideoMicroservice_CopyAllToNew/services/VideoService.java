@@ -1,90 +1,92 @@
 package com.example.VideoMicroservice_CopyAllToNew.services;
 
 import com.example.VideoMicroservice_CopyAllToNew.dto.VideoDTO;
+import com.example.VideoMicroservice_CopyAllToNew.entities.Album;
+import com.example.VideoMicroservice_CopyAllToNew.entities.Artist;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Video;
 import com.example.VideoMicroservice_CopyAllToNew.repositories.VideoRepository;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Album;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Artist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class VideoService implements VideoServiceInterface {
-    private VideoRepository videoRepository;
-    private RestTemplate restTemplate;
-    private GenreService genreService;
+    private final VideoRepository videoRepository;
+    private final GenreService genreService;
+    private final AlbumService albumService;
+    private final ArtistService artistService;
 
     @Autowired
-    public VideoService(VideoRepository videoRepository, RestTemplate restTemplate, GenreService genreService) {
+    public VideoService(VideoRepository videoRepository, GenreService genreService, AlbumService albumService, ArtistService artistService) {
         this.videoRepository = videoRepository;
-        this.restTemplate = restTemplate;
         this.genreService = genreService;
+        this.albumService = albumService;
+        this.artistService = artistService;
     }
 
+    // READ - Find all videos
     @Override
-    public List<Video> findAllVideo() {
+    public List<Video> findAllVideos() {
         return videoRepository.findAll();
     }
 
+    // READ - Find videos by artist
     @Override
-    public List<Video> findVideoByArtist(String artistName) {
-        List<Video> videoByArtist = new ArrayList<>();
+    public List<Video> findVideosByArtist(String artistName) {
+        List<Video> videosByArtist = new ArrayList<>();
 
         for (Video video : videoRepository.findAll()) {
             for (Artist artist : video.getArtists()) {
-                if (artistName.toLowerCase().equals(artist.getName().toLowerCase())) {
-                    videoByArtist.add(video);
+                if (artistName.equalsIgnoreCase(artist.getName())) {
+                    videosByArtist.add(video);
                 }
             }
         }
-
-        return videoByArtist;
+        return videosByArtist;
     }
 
+    // READ - Find videos by album
     @Override
-    public List<Video> findVideoByAlbum(String albumName) {
+    public List<Video> findVideosByAlbum(String albumName) {
         List<Video> videoByAlbum = new ArrayList<>();
 
         for (Video video : videoRepository.findAll()) {
             for (Album album : video.getAlbums()) {
-                if (albumName.toLowerCase().equals(album.getName().toLowerCase())) {
+                if (albumName.equalsIgnoreCase(album.getName())) {
                     videoByAlbum.add(video);
                 }
             }
         }
-
         return videoByAlbum;
     }
 
+    // READ - Find videos by genre
     @Override
-    public List<Video> findVideoByGenre(String genreName) {
+    public List<Video> findVideosByGenre(String genreName) {
         List<Video> videoByGenre = new ArrayList<>();
 
         for (Video video : videoRepository.findAll()) {
             for (Genre genre : video.getGenres()) {
-                if (genreName.toLowerCase().equals(genre.getGenre().toLowerCase())) {
+                if (genreName.equalsIgnoreCase(genre.getGenre())) {
                     videoByGenre.add(video);
                 }
             }
         }
-
         return videoByGenre;
     }
 
+    // READ - Find Video By URL
     @Override
     public Video findVideoByUrl(String url) {
         return videoRepository.findVideoByUrl(url);
     }
 
+    // READ - Find Video By ID
     @Override
     public Video findVideoById(long id) {
         Optional<Video> optionalVideo = videoRepository.findById(id);
@@ -96,6 +98,7 @@ public class VideoService implements VideoServiceInterface {
         }
     }
 
+    // CREATE - Create a new video
     @Override
     public Video createVideo(VideoDTO videoDTO) {
         if (videoDTO.getTitle().isEmpty() || videoDTO.getTitle() == null) {
@@ -129,31 +132,28 @@ public class VideoService implements VideoServiceInterface {
 
         // Check to see if album exist
         for (String albumName : videoDTO.getAlbumInputs()) {
-            ResponseEntity<Boolean> albumNameResponse = restTemplate.getForEntity("lb://album-service/album/exists/" + albumName, Boolean.class);
-
-            Boolean albumExist = albumNameResponse.getBody();
+            boolean albumExist = albumService.albumExists(albumName);
 
             if (!albumExist) {
-                ResponseEntity<Album> createAlbum = restTemplate.postForEntity("lb://album-service/album/createAlbum", new Album(albumName), Album.class);
+                albumService.createAlbum(new Album(albumName));
             }
-
         }
+
 
         // Check to see if artist exist
         for (String artistName : videoDTO.getArtistInputs()) {
-            ResponseEntity<Boolean> artistNameResponse = restTemplate.getForEntity("lb://artist-service/artist/exists/" + artistName, Boolean.class);
 
-            Boolean artistExist = artistNameResponse.getBody();
+            boolean artistExist = artistService.artistExists(artistName);
 
             if (!artistExist) {
-                ResponseEntity<Artist> createArtist = restTemplate.postForEntity("lb://artist-service/artist/createArtist", new Artist(artistName), Artist.class);
+                artistService.createArtist(new Artist(artistName));
             }
         }
-
 
         return videoRepository.save(new Video(videoDTO.getTitle(), videoDTO.getUrl(), videoDTO.getReleaseDate(), getAllGenres(videoDTO), getAllAlbums(videoDTO), getAllArtists(videoDTO)));
     }
 
+    // READ - Get all genres
     @Override
     public List<Genre> getAllGenres(VideoDTO videoDTO) {
         List<Genre> genreList = genreService.findAllGenres();
@@ -163,7 +163,7 @@ public class VideoService implements VideoServiceInterface {
         if (genres != null) {
             for (Genre genre : genreList) {
                 for (String genreName : videoDTO.getGenreInputs()) {
-                    if (genreName.toLowerCase().equals(genre.getGenre().toLowerCase())) {
+                    if (genreName.equalsIgnoreCase(genre.getGenre())) {
                         genres.add(genre);
                     }
                 }
@@ -173,16 +173,17 @@ public class VideoService implements VideoServiceInterface {
         return genres;
     }
 
+    // READ - Get all albums
     @Override
     public List<Album> getAllAlbums(VideoDTO videoDTO) {
-        ResponseEntity<Album[]> allAlbumsArray = restTemplate.getForEntity("lb://album-service/album/getAllAlbums", Album[].class);
 
+        List<Album> allAlbums = albumService.getAllAlbums();
         List<Album> albumList = new ArrayList<>();
 
-        if (allAlbumsArray != null) {
-            for (Album album : allAlbumsArray.getBody()) {
+        if (allAlbums != null) {
+            for (Album album : allAlbums) {
                 for (String albumName : videoDTO.getAlbumInputs()) {
-                    if (albumName.toLowerCase().equals(album.getName().toLowerCase())) {
+                    if (albumName.equalsIgnoreCase(album.getName())) {
                         albumList.add(album);
                     }
                 }
@@ -192,14 +193,17 @@ public class VideoService implements VideoServiceInterface {
         return albumList;
     }
 
+    // READ - Get all artists
     @Override
     public List<Artist> getAllArtists(VideoDTO videoDTO) {
-        ResponseEntity<Artist[]> allArtistsArray = restTemplate.getForEntity("lb://artist-service/artist/getAllArtists", Artist[].class);
+
+        List<Artist> allArtists = artistService.getAllArtists();
         List<Artist> artistList = new ArrayList<>();
-        if (allArtistsArray != null) {
-            for (Artist artist : allArtistsArray.getBody()) {
+
+        if (allArtists != null) {
+            for (Artist artist : allArtists) {
                 for (String artistName : videoDTO.getArtistInputs()) {
-                    if (artistName.toLowerCase().equals(artist.getName().toLowerCase())) {
+                    if (artistName.equalsIgnoreCase(artist.getName())) {
                         artistList.add(artist);
                     }
                 }
@@ -209,6 +213,7 @@ public class VideoService implements VideoServiceInterface {
         return artistList;
     }
 
+    // UPDATE - Update video by ID
     @Override
     public Video updateVideo(long id, VideoDTO newVideoInfo) {
         Video existingVideo = findVideoById(id);
@@ -241,6 +246,7 @@ public class VideoService implements VideoServiceInterface {
         return videoRepository.save(existingVideo);
     }
 
+    // DELETE - Delete video by ID
     @Override
     public String deleteVideo(long id) {
         Video videoToDelete = findVideoById(id);
@@ -250,6 +256,7 @@ public class VideoService implements VideoServiceInterface {
         return "Video successfully deleted";
     }
 
+    // UPDATE - Play a video
     @Override
     public String playVideo(String url) {
         Video videoToPlay = videoRepository.findVideoByUrl(url);
@@ -270,6 +277,7 @@ public class VideoService implements VideoServiceInterface {
         return "Playing " + videoToPlay.getType() + ": " + videoToPlay.getTitle();
     }
 
+    // UPDATE - Like a video
     @Override
     public String likeVideo(String url) {
         Video videoToLike = videoRepository.findVideoByUrl(url);
@@ -288,8 +296,9 @@ public class VideoService implements VideoServiceInterface {
         return "Liked video: " + videoToLike.getTitle();
     }
 
+    // UPDATE - Dislike a video
     @Override
-    public String disLikeVideo(String url) {
+    public String dislikeVideo(String url) {
         Video videoToDisLike = videoRepository.findVideoByUrl(url);
 
         if (videoToDisLike == null) {
@@ -301,6 +310,7 @@ public class VideoService implements VideoServiceInterface {
         return "Disliked " + videoToDisLike.getType() + ": " + videoToDisLike.getTitle();
     }
 
+    // READ - Check if video exists by URL
     @Override
     public Boolean checkIfVideoExistByUrl(String url) {
         Video video = videoRepository.findVideoByUrl(url);

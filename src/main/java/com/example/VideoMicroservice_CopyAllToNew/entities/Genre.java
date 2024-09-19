@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "video_genres")
 public class Genre {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String genre;
     private int totalLikes;
     private int totalPlays;
