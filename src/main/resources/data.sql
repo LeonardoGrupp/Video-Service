@@ -42,12 +42,11 @@ CREATE TABLE IF NOT EXISTS videos_albums (
     )
 ;
 
--- INSERT Genres
-INSERT INTO genres (id, genre, total_likes, total_plays)
-VALUES
-    (19, 'Rock', 0, 0),
-    (20, 'Heavy Metal', 0, 0)
-;
+-- INSERT Genres FINNS REDAN INLAGT I MUSIC-SERVICE
+-- INSERT INTO genres (id, genre, total_likes, total_plays)
+-- VALUES
+--     (19, 'Heavy Metal', 0, 0)
+-- ;
 
 INSERT INTO videos (id, type, title, url, release_date, play_counter, likes, dis_likes)
 VALUES
@@ -60,10 +59,10 @@ INSERT INTO videos_genres (videos_id, genre_id)
 VALUES
     -- VIDEOS
     -- Iron Maiden to Metal
-    (1, 20), (2, 20), (3, 20), (4, 20), (5, 20), (6, 20), (7, 20), (8, 20), (9, 20), (10, 20), (11, 20), (12, 20), (13, 20), (14, 20), (15, 20), (16, 20), (17, 20), (18, 20),
+    (1, 8), (2, 8), (3, 8), (4, 8), (5, 8), (6, 8), (7, 8), (8, 8), (9, 8), (10, 8), (11, 8), (12, 8), (13, 8), (14, 8), (15, 8), (16, 8), (17, 8), (18, 8),
 
     --Dire Straits
-    (19, 19), (20, 19), (21, 19), (22, 19), (23, 19), (24, 19), (25, 19), (26, 19), (27, 19)
+    (19, 1), (20, 1), (21, 1), (22, 1), (23, 1), (24, 1), (25, 1), (26, 1), (27, 1)
 ;
 
 -- INSERT Artists
