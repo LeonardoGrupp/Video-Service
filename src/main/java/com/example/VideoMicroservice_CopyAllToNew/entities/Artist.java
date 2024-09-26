@@ -1,9 +1,6 @@
 package com.example.VideoMicroservice_CopyAllToNew.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Artist {
@@ -12,8 +9,10 @@ public class Artist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    // Attributes
     private String name;
 
+    // Constructors
     public Artist() {
     }
 
@@ -26,6 +25,7 @@ public class Artist {
         this.name = name;
     }
 
+    // Getters & Setters
     public long getId() {
         return id;
     }

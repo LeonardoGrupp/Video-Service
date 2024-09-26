@@ -8,9 +8,12 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    // Attributes
     @Column(name = "album_name")
     private String name;
 
+    // Constructors
     public Album() {
     }
 
@@ -23,6 +26,7 @@ public class Album {
         this.name = name;
     }
 
+    // Getters & Setters
     public long getId() {
         return id;
     }

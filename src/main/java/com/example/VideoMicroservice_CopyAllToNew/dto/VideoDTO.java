@@ -1,7 +1,6 @@
 package com.example.VideoMicroservice_CopyAllToNew.dto;
 
 import jakarta.persistence.Column;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ public class VideoDTO {
     private String releaseDate;
     private List<String> genreInputs = new ArrayList<>();
     private List<String> albumInputs = new ArrayList<>();
-
     private List<String> artistInputs = new ArrayList<>();
 
     public VideoDTO() {

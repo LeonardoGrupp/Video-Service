@@ -5,11 +5,10 @@ import com.example.VideoMicroservice_CopyAllToNew.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/genre")
+@RequestMapping("/video/genre")
 public class GenreController {
 
     private GenreService genreService;
@@ -20,7 +19,7 @@ public class GenreController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Genre>> allGenres() {
+    public ResponseEntity<List<Genre>> getAllGenres() {
         return ResponseEntity.ok(genreService.findAllGenres());
     }
 

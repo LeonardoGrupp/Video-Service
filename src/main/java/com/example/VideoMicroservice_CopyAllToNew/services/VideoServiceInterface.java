@@ -5,14 +5,14 @@ import com.example.VideoMicroservice_CopyAllToNew.entities.Album;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Artist;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Video;
-
 import java.util.List;
 
 public interface VideoServiceInterface {
-    List<Video> findAllVideo();
-    List<Video> findVideoByArtist(String artistName);
-    List<Video> findVideoByAlbum(String albumName);
-    List<Video> findVideoByGenre(String genreName);
+
+    List<Video> findAllVideos();
+    List<Video> findVideosByArtist(String artistName);
+    List<Video> findVideosByAlbum(String albumName);
+    List<Video> findVideosByGenre(String genreName);
     Video findVideoByUrl(String url);
     Video findVideoById(long id);
     Video createVideo(VideoDTO videoDTO);
@@ -23,6 +23,6 @@ public interface VideoServiceInterface {
     String deleteVideo(long id);
     String playVideo(String url);
     String likeVideo(String url);
-    String disLikeVideo(String url);
+    String dislikeVideo(String url);
     Boolean checkIfVideoExistByUrl(String url);
 }

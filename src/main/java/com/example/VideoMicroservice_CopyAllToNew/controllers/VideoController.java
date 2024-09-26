@@ -6,12 +6,12 @@ import com.example.VideoMicroservice_CopyAllToNew.services.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/video")
 public class VideoController {
+
     private VideoService videoService;
 
     @Autowired
@@ -20,23 +20,23 @@ public class VideoController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Video>> getAllVideo() {
-        return ResponseEntity.ok(videoService.findAllVideo());
+    public ResponseEntity<List<Video>> getAllVideos() {
+        return ResponseEntity.ok(videoService.findAllVideos());
     }
 
     @GetMapping("/artist/{artist}")
-    public ResponseEntity<List<Video>> getAllVideoForArtist(@PathVariable("artist") String artist) {
-        return ResponseEntity.ok(videoService.findVideoByArtist(artist));
+    public ResponseEntity<List<Video>> getAllVideosForArtist(@PathVariable("artist") String artist) {
+        return ResponseEntity.ok(videoService.findVideosByArtist(artist));
     }
 
     @GetMapping("/album/{album}")
-    public ResponseEntity<List<Video>> getAllVideoForAlbum(@PathVariable("album") String album) {
-        return ResponseEntity.ok(videoService.findVideoByAlbum(album));
+    public ResponseEntity<List<Video>> getAllVideosForAlbum(@PathVariable("album") String album) {
+        return ResponseEntity.ok(videoService.findVideosByAlbum(album));
     }
 
     @GetMapping("/genre/{genre}")
-    public ResponseEntity<List<Video>> getAllVideoForGenre(@PathVariable("genre") String genre) {
-        return ResponseEntity.ok(videoService.findVideoByGenre(genre));
+    public ResponseEntity<List<Video>> getAllVideosForGenre(@PathVariable("genre") String genre) {
+        return ResponseEntity.ok(videoService.findVideosByGenre(genre));
     }
 
     @GetMapping("/get/{url}")
@@ -70,8 +70,8 @@ public class VideoController {
     }
 
     @GetMapping("/dislike/{url}")
-    public ResponseEntity<String> disLikeVideo(@PathVariable("url") String url) {
-        return ResponseEntity.ok(videoService.disLikeVideo(url));
+    public ResponseEntity<String> dislikeVideo(@PathVariable("url") String url) {
+        return ResponseEntity.ok(videoService.dislikeVideo(url));
     }
 
     @GetMapping("/exists/{url}")
