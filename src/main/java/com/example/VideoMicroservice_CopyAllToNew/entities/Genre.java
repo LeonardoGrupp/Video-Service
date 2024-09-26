@@ -3,7 +3,8 @@ package com.example.VideoMicroservice_CopyAllToNew.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "video_genres")
+//@Table(name = "video_genres")
+@Table(name = "genres")
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

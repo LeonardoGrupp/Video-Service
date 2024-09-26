@@ -1,10 +1,10 @@
 package com.example.VideoMicroservice_CopyAllToNew.services;
 
 import com.example.VideoMicroservice_CopyAllToNew.dto.VideoDTO;
+import com.example.VideoMicroservice_CopyAllToNew.entities.Album;
+import com.example.VideoMicroservice_CopyAllToNew.entities.Artist;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Video;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Album;
-import com.example.VideoMicroservice_CopyAllToNew.vo.Artist;
 
 import java.util.List;
 
