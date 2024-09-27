@@ -11,6 +11,7 @@ public class Genre {
     private long id;
 
     private String genre;
+    private String type;
     private int totalLikes;
     private int totalPlays;
 
@@ -19,6 +20,7 @@ public class Genre {
 
     public Genre(String genre) {
         this.genre = genre;
+        this.type = "video";
         this.totalLikes = 0;
         this.totalPlays = 0;
     }
@@ -37,6 +39,14 @@ public class Genre {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getTotalLikes() {

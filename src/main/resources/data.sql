@@ -1,4 +1,3 @@
-
 -- move genres, artist and album to right application
 
 INSERT INTO genres (id, genre, total_likes, total_plays)
