@@ -1,7 +1,6 @@
 package com.example.VideoMicroservice_CopyAllToNew.services;
 
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
-
 import java.util.List;
 
 public interface GenreServiceInterface {

@@ -31,7 +31,7 @@ class GenreControllerTest {
 
         when(genreServiceMock.findAllGenres()).thenReturn(genreList);
 
-        ResponseEntity<List<Genre>> result = genreController.allGenres();
+        ResponseEntity<List<Genre>> result = genreController.getAllGenres();
 
         assertEquals(genreList, result.getBody(), "ERROR: Lists was not identical");
         assertEquals("Rock", result.getBody().get(0).getGenre());
