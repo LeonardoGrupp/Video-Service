@@ -29,13 +29,13 @@ public class VideoService implements VideoServiceInterface {
         this.artistService = artistService;
     }
 
-    // READ - Find all videos
+    // READ - Get All Videos
     @Override
     public List<Video> findAllVideos() {
         return videoRepository.findAll();
     }
 
-    // READ - Find videos by artist
+    // READ - Get Video By Artist
     @Override
     public List<Video> findVideosByArtist(String artistName) {
         List<Video> videosByArtist = new ArrayList<>();
@@ -50,7 +50,7 @@ public class VideoService implements VideoServiceInterface {
         return videosByArtist;
     }
 
-    // READ - Find videos by album
+    // READ - Get Videos By Album
     @Override
     public List<Video> findVideosByAlbum(String albumName) {
         List<Video> videoByAlbum = new ArrayList<>();
@@ -65,7 +65,7 @@ public class VideoService implements VideoServiceInterface {
         return videoByAlbum;
     }
 
-    // READ - Find videos by genre
+    // READ - Get Videos By Genre
     @Override
     public List<Video> findVideosByGenre(String genreName) {
         List<Video> videoByGenre = new ArrayList<>();
@@ -80,13 +80,13 @@ public class VideoService implements VideoServiceInterface {
         return videoByGenre;
     }
 
-    // READ - Find Video By URL
+    // READ - Get Video By URL
     @Override
     public Video findVideoByUrl(String url) {
         return videoRepository.findVideoByUrl(url);
     }
 
-    // READ - Find Video By ID
+    // READ - Get Video By ID
     @Override
     public Video findVideoById(long id) {
         Optional<Video> optionalVideo = videoRepository.findById(id);
@@ -98,7 +98,7 @@ public class VideoService implements VideoServiceInterface {
         }
     }
 
-    // CREATE - Create a new video
+    // CREATE - Create A New Video
     @Override
     public Video createVideo(VideoDTO videoDTO) {
         if (videoDTO.getTitle().isEmpty() || videoDTO.getTitle() == null) {
@@ -130,7 +130,7 @@ public class VideoService implements VideoServiceInterface {
             }
         }
 
-        // Check to see if album exist
+        // READ - Check If Album Exists
         for (String albumName : videoDTO.getAlbumInputs()) {
             boolean albumExist = albumService.albumExists(albumName);
 
@@ -140,7 +140,7 @@ public class VideoService implements VideoServiceInterface {
         }
 
 
-        // Check to see if artist exist
+        // READ - Check If Artist Exists
         for (String artistName : videoDTO.getArtistInputs()) {
 
             boolean artistExist = artistService.artistExists(artistName);
@@ -153,7 +153,7 @@ public class VideoService implements VideoServiceInterface {
         return videoRepository.save(new Video(videoDTO.getTitle(), videoDTO.getUrl(), videoDTO.getReleaseDate(), getAllGenres(videoDTO), getAllAlbums(videoDTO), getAllArtists(videoDTO)));
     }
 
-    // READ - Get all genres
+    // READ - Get All Genres
     @Override
     public List<Genre> getAllGenres(VideoDTO videoDTO) {
         List<Genre> genreList = genreService.findAllGenres();
@@ -173,7 +173,7 @@ public class VideoService implements VideoServiceInterface {
         return genres;
     }
 
-    // READ - Get all albums
+    // READ - Get All Albums
     @Override
     public List<Album> getAllAlbums(VideoDTO videoDTO) {
 
@@ -193,7 +193,7 @@ public class VideoService implements VideoServiceInterface {
         return albumList;
     }
 
-    // READ - Get all artists
+    // READ - Get All Artists
     @Override
     public List<Artist> getAllArtists(VideoDTO videoDTO) {
 
@@ -213,7 +213,7 @@ public class VideoService implements VideoServiceInterface {
         return artistList;
     }
 
-    // UPDATE - Update video by ID
+    // UPDATE - Update Video By ID
     @Override
     public Video updateVideo(long id, VideoDTO newVideoInfo) {
         Video existingVideo = findVideoById(id);
@@ -246,7 +246,7 @@ public class VideoService implements VideoServiceInterface {
         return videoRepository.save(existingVideo);
     }
 
-    // DELETE - Delete video by ID
+    // DELETE - Delete Video By ID
     @Override
     public String deleteVideo(long id) {
         Video videoToDelete = findVideoById(id);
@@ -256,7 +256,7 @@ public class VideoService implements VideoServiceInterface {
         return "Video successfully deleted";
     }
 
-    // UPDATE - Play a video
+    // UPDATE - Play Video
     @Override
     public String playVideo(String url) {
         Video videoToPlay = videoRepository.findVideoByUrl(url);
@@ -277,7 +277,7 @@ public class VideoService implements VideoServiceInterface {
         return "Playing " + videoToPlay.getType() + ": " + videoToPlay.getTitle();
     }
 
-    // UPDATE - Like a video
+    // UPDATE - Like A Video
     @Override
     public String likeVideo(String url) {
         Video videoToLike = videoRepository.findVideoByUrl(url);
@@ -296,7 +296,7 @@ public class VideoService implements VideoServiceInterface {
         return "Liked video: " + videoToLike.getTitle();
     }
 
-    // UPDATE - Dislike a video
+    // UPDATE - Dislike A Video
     @Override
     public String dislikeVideo(String url) {
         Video videoToDisLike = videoRepository.findVideoByUrl(url);
@@ -310,7 +310,7 @@ public class VideoService implements VideoServiceInterface {
         return "Disliked " + videoToDisLike.getType() + ": " + videoToDisLike.getTitle();
     }
 
-    // READ - Check if video exists by URL
+    // READ - Check If Video Exists By URL
     @Override
     public Boolean checkIfVideoExistByUrl(String url) {
         Video video = videoRepository.findVideoByUrl(url);

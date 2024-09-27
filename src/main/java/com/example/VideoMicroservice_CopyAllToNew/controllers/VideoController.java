@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/video")
 public class VideoController {
 
-    private VideoService videoService;
+    private final VideoService videoService;
 
     @Autowired
     public VideoController(VideoService videoService) {

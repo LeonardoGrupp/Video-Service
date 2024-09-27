@@ -5,12 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@ActiveProfiles("test")
+@ActiveProfiles("test")                                                             // kör konfigurationen från application-test.properties
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)       // Gör en rollback efter varje test så att inget förändras i H2-databasen
 class GenreRepositoryTest {
 
     @Autowired
@@ -18,15 +19,26 @@ class GenreRepositoryTest {
 
     @BeforeEach
     void setUp() {
-
+        genreRepository.save(new Genre("Rock"));     // Alt 1
+        Genre genre = new Genre("Pop");              // Alt 2
+        genreRepository.save(genre);
     }
 
     @Test
-    void findGenreByGenre() {
-        genreRepository.save(new Genre("Rock"));
+    void findGenreByGenreShouldReturnTrueWhenPopExits() {
+        Genre response = genreRepository.findGenreByGenre("Pop");
+        assertEquals(response.getGenre(), "Pop");
+    }
 
-        Genre response = genreRepository.findGenreByGenre("Rock");
+    @Test
+    void findGenreByGenreShouldReturnIdTwoForPop() {
+        Genre response = genreRepository.findGenreByGenre("Pop");
+        assertEquals(response.getId(), 2);
+    }
 
-        assertEquals("Rock", response.getGenre(), "ERROR: Genres was not identical");
+    @Test
+    void findGenreByGenreShouldReturnNullWhenGenreNotFound() {
+        Genre response = genreRepository.findGenreByGenre("Jazz");
+        assertNull(response);
     }
 }

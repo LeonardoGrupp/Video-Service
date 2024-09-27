@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoDTO {
+
+    // Attributes
     private String type;
     @Column(nullable = false, length = 250)
     private String title;
@@ -16,6 +18,7 @@ public class VideoDTO {
     private List<String> albumInputs = new ArrayList<>();
     private List<String> artistInputs = new ArrayList<>();
 
+    // Constructors
     public VideoDTO() {
     }
 
@@ -39,6 +42,7 @@ public class VideoDTO {
         this.artistInputs = artistInputs;
     }
 
+    // Getters & Setters
     public String getType() {
         return type;
     }

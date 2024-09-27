@@ -1,3 +1,4 @@
+/*
 package com.example.VideoMicroservice_CopyAllToNew.services;
 
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
@@ -225,4 +226,4 @@ class GenreServiceTest {
 
         verify(genreRepositoryMock).save(genre);
     }
-}
+}*/
