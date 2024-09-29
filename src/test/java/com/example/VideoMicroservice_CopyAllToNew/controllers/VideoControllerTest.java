@@ -1,6 +1,8 @@
 package com.example.VideoMicroservice_CopyAllToNew.controllers;
 
 import com.example.VideoMicroservice_CopyAllToNew.dto.VideoDTO;
+import com.example.VideoMicroservice_CopyAllToNew.entities.Album;
+import com.example.VideoMicroservice_CopyAllToNew.entities.Artist;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
 import com.example.VideoMicroservice_CopyAllToNew.services.VideoService;
 import com.example.VideoMicroservice_CopyAllToNew.entities.Video;
@@ -9,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,21 +38,21 @@ class VideoControllerTest {
                 new Video("title4", "url4", "release4")
         );
 
-        when(videoServiceMock.findAllVideo()).thenReturn(allVideo);
+        when(videoServiceMock.findAllVideos()).thenReturn(allVideo);
 
-        ResponseEntity<List<Video>> response = videoController.getAllVideo();
+        ResponseEntity<List<Video>> response = videoController.getAllVideos();
 
         assertEquals(allVideo, response.getBody(), "ERROR: Lists was not identical");
-        assertEquals(allVideo.size(), response.getBody().size(), "ERROR: Sizes was not identical");
+        assertEquals(allVideo.size(), Objects.requireNonNull(response.getBody()).size(), "ERROR: Sizes was not identical");
 
-        verify(videoServiceMock).findAllVideo();
+        verify(videoServiceMock).findAllVideos();
     }
 
     @Test
     void getAllVideoForArtistShouldReturnList() {
-        List<Album> albumList = Arrays.asList(new Album("The Marshall Mathers LP"));
-        List<Artist> artistList = Arrays.asList(new Artist("Eminem"));
-        List<Genre> genreList = Arrays.asList(new Genre("Hip-Hop"));
+        List<Album> albumList = List.of(new Album("The Marshall Mathers LP"));
+        List<Artist> artistList = List.of(new Artist("Eminem"));
+        List<Genre> genreList = List.of(new Genre("Hip-Hop"));
         List<Video> artistVideo = Arrays.asList(
                 new Video("title1", "url1", "releasedate1", genreList, albumList, artistList),
                 new Video("title2", "url2", "releasedate2", genreList, albumList, artistList),
@@ -58,22 +60,22 @@ class VideoControllerTest {
                 new Video("title4", "url4", "releasedate4", genreList, albumList, artistList)
         );
 
-        when(videoServiceMock.findVideoByArtist("Eminem")).thenReturn(artistVideo);
+        when(videoServiceMock.findVideosByArtist("Eminem")).thenReturn(artistVideo);
 
-        ResponseEntity<List<Video>> response = videoController.getAllVideoForArtist("Eminem");
+        ResponseEntity<List<Video>> response = videoController.getAllVideosForArtist("Eminem");
 
         assertEquals(artistVideo, response.getBody(), "ERROR: Lists was not identical");
         assertEquals(artistVideo.get(0).getArtists().get(0), response.getBody().get(0).getArtists().get(0), "ERROR: Artists was not identical");
         assertEquals(artistVideo.size(), response.getBody().size(), "ERROR: Sizes was not identical");
 
-        verify(videoServiceMock).findVideoByArtist("Eminem");
+        verify(videoServiceMock).findVideosByArtist("Eminem");
     }
 
     @Test
     void getAllVideoForAlbumShouldReturnList() {
-        List<Album> albumList = Arrays.asList(new Album("The Marshall Mathers LP"));
-        List<Artist> artistList = Arrays.asList(new Artist("Eminem"));
-        List<Genre> genreList = Arrays.asList(new Genre("Hip-Hop"));
+        List<Album> albumList = List.of(new Album("The Marshall Mathers LP"));
+        List<Artist> artistList = List.of(new Artist("Eminem"));
+        List<Genre> genreList = List.of(new Genre("Hip-Hop"));
         List<Video> albumVideo = Arrays.asList(
                 new Video("title1", "url1", "releasedate1", genreList, albumList, artistList),
                 new Video("title2", "url2", "releasedate2", genreList, albumList, artistList),
@@ -81,22 +83,22 @@ class VideoControllerTest {
                 new Video("title4", "url4", "releasedate4", genreList, albumList, artistList)
         );
 
-        when(videoServiceMock.findVideoByAlbum("The Marshall Mathers LP")).thenReturn(albumVideo);
+        when(videoServiceMock.findVideosByAlbum("The Marshall Mathers LP")).thenReturn(albumVideo);
 
-        ResponseEntity<List<Video>> response = videoController.getAllVideoForAlbum("The Marshall Mathers LP");
+        ResponseEntity<List<Video>> response = videoController.getAllVideosForAlbum("The Marshall Mathers LP");
 
         assertEquals(albumVideo, response.getBody(), "ERROR: Lists was not identical");
-        assertEquals(albumVideo.size(), response.getBody().size(), "ERROR: Sizes was not identical");
+        assertEquals(albumVideo.size(), Objects.requireNonNull(response.getBody()).size(), "ERROR: Sizes was not identical");
         assertEquals("The Marshall Mathers LP", response.getBody().get(0).getAlbums().get(0).getName(), "ERROR: Albums was not identical");
 
-        verify(videoServiceMock).findVideoByAlbum("The Marshall Mathers LP");
+        verify(videoServiceMock).findVideosByAlbum("The Marshall Mathers LP");
     }
 
     @Test
     void getAllVideoForGenreShouldReturnList() {
-        List<Album> albumList = Arrays.asList(new Album("The Marshall Mathers LP"));
-        List<Artist> artistList = Arrays.asList(new Artist("Eminem"));
-        List<Genre> genreList = Arrays.asList(new Genre("Hip-Hop"));
+        List<Album> albumList = List.of(new Album("The Marshall Mathers LP"));
+        List<Artist> artistList = List.of(new Artist("Eminem"));
+        List<Genre> genreList = List.of(new Genre("Hip-Hop"));
         List<Video> genreVideo = Arrays.asList(
                 new Video("title1", "url1", "releasedate1", genreList, albumList, artistList),
                 new Video("title2", "url2", "releasedate2", genreList, albumList, artistList),
@@ -104,15 +106,15 @@ class VideoControllerTest {
                 new Video("title4", "url4", "releasedate4", genreList, albumList, artistList)
         );
 
-        when(videoServiceMock.findVideoByGenre("Hip-Hop")).thenReturn(genreVideo);
+        when(videoServiceMock.findVideosByGenre("Hip-Hop")).thenReturn(genreVideo);
 
-        ResponseEntity<List<Video>> response = videoController.getAllVideoForGenre("Hip-Hop");
+        ResponseEntity<List<Video>> response = videoController.getAllVideosForGenre("Hip-Hop");
 
         assertEquals(genreVideo, response.getBody(), "ERROR: Lists was not identical");
-        assertEquals(genreVideo.size(), response.getBody().size(), "ERROR: Sizes was not identical");
+        assertEquals(genreVideo.size(), Objects.requireNonNull(response.getBody()).size(), "ERROR: Sizes was not identical");
         assertEquals("Hip-Hop", response.getBody().get(0).getGenres().get(0).getGenre(), "ERROR: Genres was not identical");
 
-        verify(videoServiceMock).findVideoByGenre("Hip-Hop");
+        verify(videoServiceMock).findVideosByGenre("Hip-Hop");
     }
 
     @Test
@@ -123,37 +125,37 @@ class VideoControllerTest {
 
         ResponseEntity<Video> response = videoController.getVideoByUrl("url");
 
-        assertEquals("title", response.getBody().getTitle(), "ERROR: Video Titles was not identical");
+        assertEquals("title", Objects.requireNonNull(response.getBody()).getTitle(), "ERROR: Video Titles was not identical");
 
         verify(videoServiceMock).findVideoByUrl("url");
     }
 
     @Test
     void createVideoShouldReturnVideo() {
-        List<String> albumInputs = Arrays.asList("The Slim Shady LP");
-        List<String> artistInputs = Arrays.asList("Eminem");
-        List<String> genreInputs = Arrays.asList("Hip-Hop");
+        List<String> albumInputs = List.of("The Slim Shady LP");
+        List<String> artistInputs = List.of("Eminem");
+        List<String> genreInputs = List.of("Hip-Hop");
         VideoDTO videoDTO = new VideoDTO("The Real Slim Shady", "url1", "2000-02-22", genreInputs, albumInputs, artistInputs);
 
-        List<Album> albumList = Arrays.asList(new Album("The Slim Shady LP"));
-        List<Artist> artistList = Arrays.asList(new Artist("Eminem"));
-        List<Genre> genreList = Arrays.asList(new Genre("Hip-Hop"));
+        List<Album> albumList = List.of(new Album("The Slim Shady LP"));
+        List<Artist> artistList = List.of(new Artist("Eminem"));
+        List<Genre> genreList = List.of(new Genre("Hip-Hop"));
         Video videoToBeCreated = new Video(videoDTO.getTitle(), videoDTO.getUrl(), videoDTO.getReleaseDate(), genreList, albumList, artistList);
 
         when(videoServiceMock.createVideo(videoDTO)).thenReturn(videoToBeCreated);
 
         ResponseEntity<Video> response = videoController.createVideo(videoDTO);
 
-        assertEquals("The Real Slim Shady", response.getBody().getTitle(), "ERROR: Video was not identical");
+        assertEquals("The Real Slim Shady", Objects.requireNonNull(response.getBody()).getTitle(), "ERROR: Video was not identical");
 
         verify(videoServiceMock).createVideo(videoDTO);
     }
 
     @Test
     void createVideoNoTypeShouldReturnException() {
-        List<String> albumInputs = Arrays.asList("The Slim Shady LP");
-        List<String> artistInputs = Arrays.asList("Eminem");
-        List<String> genreInputs = Arrays.asList("Hip-Hop");
+        List<String> albumInputs = List.of("The Slim Shady LP");
+        List<String> artistInputs = List.of("Eminem");
+        List<String> genreInputs = List.of("Hip-Hop");
         VideoDTO videoDTO = new VideoDTO("title", "url1", "2022-02-02", genreInputs, albumInputs, artistInputs);
 
         when(videoServiceMock.createVideo(videoDTO)).thenThrow(new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "ERROR: Video Type was not provided"));
@@ -170,9 +172,9 @@ class VideoControllerTest {
 
     @Test
     void createVideoNoTitleShouldReturnException() {
-        List<String> albumInputs = Arrays.asList("The Slim Shady LP");
-        List<String> artistInputs = Arrays.asList("Eminem");
-        List<String> genreInputs = Arrays.asList("Hip-Hop");
+        List<String> albumInputs = List.of("The Slim Shady LP");
+        List<String> artistInputs = List.of("Eminem");
+        List<String> genreInputs = List.of("Hip-Hop");
         VideoDTO videoDTO = new VideoDTO("", "url1", "2022-02-02", genreInputs, albumInputs, artistInputs);
 
         when(videoServiceMock.createVideo(videoDTO)).thenThrow(new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "ERROR: Video Title was not provided"));
@@ -189,9 +191,9 @@ class VideoControllerTest {
 
     @Test
     void createVideoNoUrlShouldReturnException() {
-        List<String> albumInputs = Arrays.asList("The Slim Shady LP");
-        List<String> artistInputs = Arrays.asList("Eminem");
-        List<String> genreInputs = Arrays.asList("Hip-Hop");
+        List<String> albumInputs = List.of("The Slim Shady LP");
+        List<String> artistInputs = List.of("Eminem");
+        List<String> genreInputs = List.of("Hip-Hop");
         VideoDTO videoDTO = new VideoDTO("The Real Slim Shady", "", "2022-02-02", genreInputs, albumInputs, artistInputs);
 
         when(videoServiceMock.createVideo(videoDTO)).thenThrow(new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "ERROR: Video URL was not provided"));
@@ -208,9 +210,9 @@ class VideoControllerTest {
 
     @Test
     void createVideoNoReleaseDateShouldReturnException() {
-        List<String> albumInputs = Arrays.asList("The Slim Shady LP");
-        List<String> artistInputs = Arrays.asList("Eminem");
-        List<String> genreInputs = Arrays.asList("Hip-Hop");
+        List<String> albumInputs = List.of("The Slim Shady LP");
+        List<String> artistInputs = List.of("Eminem");
+        List<String> genreInputs = List.of("Hip-Hop");
         VideoDTO videoDTO = new VideoDTO("The Real Slim Shady", "url", "", genreInputs, albumInputs, artistInputs);
 
         when(videoServiceMock.createVideo(videoDTO)).thenThrow(new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "ERROR: Video Release date was not provided"));
@@ -227,9 +229,9 @@ class VideoControllerTest {
 
     @Test
     void createVideoNoGenreShouldReturnException() {
-        List<String> albumInputs = Arrays.asList("The Slim Shady LP");
-        List<String> artistInputs = Arrays.asList("Eminem");
-        List<String> genreInputs = Arrays.asList("Hip-Hop");
+        List<String> albumInputs = List.of("The Slim Shady LP");
+        List<String> artistInputs = List.of("Eminem");
+        List<String> genreInputs = List.of("Hip-Hop");
         VideoDTO videoDTO = new VideoDTO("The Real Slim Shady", "url1", "2022-02-02", genreInputs, albumInputs, artistInputs);
 
         when(videoServiceMock.createVideo(videoDTO)).thenThrow(new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "ERROR: Video Genre was not provided"));
@@ -246,9 +248,9 @@ class VideoControllerTest {
 
     @Test
     void createVideoNoAlbumInputsShouldReturnException() {
-        List<String> albumInputs = Arrays.asList("");
-        List<String> artistInputs = Arrays.asList("Eminem");
-        List<String> genreInputs = Arrays.asList("Hip-Hop");
+        List<String> albumInputs = List.of("");
+        List<String> artistInputs = List.of("Eminem");
+        List<String> genreInputs = List.of("Hip-Hop");
         VideoDTO videoDTO = new VideoDTO("The Real Slim Shady", "url1", "2022-02-02", genreInputs, albumInputs, artistInputs);
 
         when(videoServiceMock.createVideo(videoDTO)).thenThrow(new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "ERROR: Video Album was not provided"));
@@ -265,9 +267,9 @@ class VideoControllerTest {
 
     @Test
     void createVideoNoArtistShouldReturnException() {
-        List<String> albumInputs = Arrays.asList("The Slim Shady LP");
-        List<String> artistInputs = Arrays.asList("");
-        List<String> genreInputs = Arrays.asList("Hip-Hop");
+        List<String> albumInputs = List.of("The Slim Shady LP");
+        List<String> artistInputs = List.of("");
+        List<String> genreInputs = List.of("Hip-Hop");
         VideoDTO videoDTO = new VideoDTO("The Real Slim Shady", "", "2022-02-02", genreInputs, albumInputs, artistInputs);
 
         when(videoServiceMock.createVideo(videoDTO)).thenThrow(new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "ERROR: Video Artist was not provided"));
@@ -284,37 +286,37 @@ class VideoControllerTest {
 
     @Test
     void updateVideoShouldReturnVideo() {
-        List<Album> albumList = Arrays.asList(new Album("album1"));
-        List<Artist> artistList = Arrays.asList(new Artist("artist1"));
-        List<Genre> genreList = Arrays.asList(new Genre("Hip-Hop"));
+        List<Album> albumList = List.of(new Album("album1"));
+        List<Artist> artistList = List.of(new Artist("artist1"));
+        List<Genre> genreList = List.of(new Genre("Hip-Hop"));
         long videoId = 1;
         Video existingVideo = new Video("title1", "url1", "2022-02-02", genreList, albumList, artistList);
         existingVideo.setId(videoId);
 
-        List<String> albumInputs = Arrays.asList("other album");
-        List<String> artistInputs = Arrays.asList("other artist");
-        List<String> genreInputs = Arrays.asList("other genre");
+        List<String> albumInputs = List.of("other album");
+        List<String> artistInputs = List.of("other artist");
+        List<String> genreInputs = List.of("other genre");
         VideoDTO newInfo = new VideoDTO("new title", "url2", "2024-09-02", genreInputs, albumInputs, artistInputs);
 
-        List<Album> newVideoAlbumList = Arrays.asList(new Album("other album"));
-        List<Artist> newVideoArtistList = Arrays.asList(new Artist("other artist"));
-        List<Genre> newVideoGenreList = Arrays.asList(new Genre("other genre"));
+        List<Album> newVideoAlbumList = List.of(new Album("other album"));
+        List<Artist> newVideoArtistList = List.of(new Artist("other artist"));
+        List<Genre> newVideoGenreList = List.of(new Genre("other genre"));
         Video newVideoInfo = new Video("new title", "url2", "2024-09-02", newVideoGenreList, newVideoAlbumList, newVideoArtistList);
 
         when(videoServiceMock.updateVideo(videoId, newInfo)).thenReturn(newVideoInfo);
 
         ResponseEntity<Video> response = videoController.updateVideo(videoId, newInfo);
 
-        assertEquals("new title", response.getBody().getTitle(), "ERROR: Titles was not identical");
+        assertEquals("new title", Objects.requireNonNull(response.getBody()).getTitle(), "ERROR: Titles was not identical");
 
         verify(videoServiceMock).updateVideo(videoId, newInfo);
     }
 
     @Test
     void updateVideoInvalidIdShouldReturnException() {
-        List<String> albumList = Arrays.asList("new album");
-        List<String> artistList = Arrays.asList("new artist");
-        List<String> genreList = Arrays.asList("new genre");
+        List<String> albumList = List.of("new album");
+        List<String> artistList = List.of("new artist");
+        List<String> genreList = List.of("new genre");
 
         long videoId = 1;
         VideoDTO newInfo = new VideoDTO("new title", "url1", "2022-02-02", genreList, albumList, artistList);
@@ -426,29 +428,29 @@ class VideoControllerTest {
         Video videoToDisLike = new Video("title", "url", "release");
         videoToDisLike.setLikes(0);
 
-        when(videoServiceMock.disLikeVideo(videoToDisLike.getUrl())).thenReturn("Disliked Video: " + videoToDisLike.getTitle());
+        when(videoServiceMock.dislikeVideo(videoToDisLike.getUrl())).thenReturn("Disliked Video: " + videoToDisLike.getTitle());
 
-        String result = videoServiceMock.disLikeVideo(videoToDisLike.getUrl());
+        String result = videoServiceMock.dislikeVideo(videoToDisLike.getUrl());
 
         assertEquals("Disliked Video: " + videoToDisLike.getTitle(), result, "ERROR: Strings was not identical");
 
-        verify(videoServiceMock).disLikeVideo(videoToDisLike.getUrl());
+        verify(videoServiceMock).dislikeVideo(videoToDisLike.getUrl());
     }
 
     @Test
     void disLikeVideoShouldReturnException() {
         String url = "url";
 
-        when(videoServiceMock.disLikeVideo(url)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "ERROR: Video with URL not found"));
+        when(videoServiceMock.dislikeVideo(url)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "ERROR: Video with URL not found"));
 
         ResponseStatusException response = assertThrows(ResponseStatusException.class, () -> {
-            videoController.disLikeVideo(url);
+            videoController.dislikeVideo(url);
         }, "ERROR: Exception was not thrown");
 
         assertEquals("ERROR: Video with URL not found", response.getReason(), "ERROR: Exceptions was not identical");
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode(), "ERROR: Status Codes was not identical");
 
-        verify(videoServiceMock).disLikeVideo(url);
+        verify(videoServiceMock).dislikeVideo(url);
     }
 
     @Test
@@ -459,7 +461,7 @@ class VideoControllerTest {
 
         ResponseEntity<Boolean> response = videoController.videoExist(url);
 
-        assertTrue(response.getBody(), "ERROR: Response was false");
+        assertEquals(Boolean.TRUE, response.getBody(), "ERROR: Response was false");
 
         verify(videoServiceMock).checkIfVideoExistByUrl(url);
     }
@@ -472,7 +474,7 @@ class VideoControllerTest {
 
         ResponseEntity<Boolean> response = videoController.videoExist(url);
 
-        assertFalse(response.getBody(), "ERROR: Response was true");
+        assertNotEquals(Boolean.TRUE, response.getBody(), "ERROR: Response was true");
 
         verify(videoServiceMock).checkIfVideoExistByUrl(url);
     }

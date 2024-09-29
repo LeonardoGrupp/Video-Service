@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class GenreService implements GenreServiceInterface {
-    private GenreRepository genreRepository;
+    private final GenreRepository genreRepository;
 
     @Autowired
     public GenreService(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
     }
 
+    // READ - Check If Genre Exits
     @Override
     public boolean genreExists(String genreName) {
         Genre genre = findGenreByName(genreName);
@@ -30,16 +30,19 @@ public class GenreService implements GenreServiceInterface {
         }
     }
 
+    // READ - Get All Genres
     @Override
     public List<Genre> findAllGenres() {
         return genreRepository.findAll();
     }
 
+    // READ - Get Genre By Name
     @Override
     public Genre findGenreByName(String genre) {
         return genreRepository.findGenreByGenre(genre);
     }
 
+    // READ - Get Genre By ID
     @Override
     public Genre findGenreById(long id) {
         Optional<Genre> optionalGenre = genreRepository.findById(id);
@@ -51,6 +54,7 @@ public class GenreService implements GenreServiceInterface {
         }
     }
 
+    // CREATE - Create A New Genre
     @Override
     public Genre create(Genre genre) {
         if (genre.getGenre() == null || genre.getGenre().isEmpty()) {
@@ -65,6 +69,7 @@ public class GenreService implements GenreServiceInterface {
         return genreRepository.save(genre);
     }
 
+    // UPDATE - Update A Genre By ID
     @Override
     public Genre update(long id, Genre newInfo) {
         Genre existingGenre = findGenreById(id);
@@ -80,6 +85,7 @@ public class GenreService implements GenreServiceInterface {
         return genreRepository.save(existingGenre);
     }
 
+    // DELETE - Delete A Genre By ID
     @Override
     public String delete(long id) {
         Genre genreToBeDeleted = findGenreById(id);
@@ -93,6 +99,7 @@ public class GenreService implements GenreServiceInterface {
         return "Genre deleted";
     }
 
+    // UPDATE - Add +1 To Played Genre
     @Override
     public void countPlay(Genre genre) {
         genre.countPlay();
@@ -100,6 +107,7 @@ public class GenreService implements GenreServiceInterface {
         genreRepository.save(genre);
     }
 
+    // UPDATE - Add +1 To Liked Genre
     @Override
     public void addLike(Genre genre) {
         genre.addLike();

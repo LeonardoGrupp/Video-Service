@@ -10,11 +10,13 @@ public class Genre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    // Attributes
     private String genre;
     private String type;
     private int totalLikes;
     private int totalPlays;
 
+    // Constructors
     public Genre() {
     }
 
@@ -25,6 +27,7 @@ public class Genre {
         this.totalPlays = 0;
     }
 
+    // Getters & Setters
     public long getId() {
         return id;
     }

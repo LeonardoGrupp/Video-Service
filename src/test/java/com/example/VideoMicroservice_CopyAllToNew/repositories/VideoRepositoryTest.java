@@ -5,32 +5,40 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@ActiveProfiles("test")
+@ActiveProfiles("test")                                                             // kör konfigurationen från application-test.properties
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)       // Gör en rollback efter varje test så att inget förändras i H2-databasen
 class VideoRepositoryTest {
+
     @Autowired
     private VideoRepository videoRepository;
-    private Video video1;
 
     @BeforeEach
     void setUp() {
-        video1 = new Video("The Way I Am", "url99", "2002-02-22");
-        Video rnb1 = new Video("Cheer (Drink to That", "url3", "2009-07-14");
-        Video rnb2 = new Video("Diamonds", "url4", "2010-06-02");
-
-        videoRepository.save(video1);
-        videoRepository.save(rnb1);
-        videoRepository.save(rnb2);
+        videoRepository.save(new Video("The Greatest", "url2000", "2016"));
+        Video video = new Video("Kickstart My Heart", "url2001", "1990");
+        videoRepository.save(video);
     }
 
     @Test
-    void findMusicByUrlShouldReturnMusic() {
-        Video video = videoRepository.findVideoByUrl("url99");
+    void findVideoByUrlShouldReturnVideoWithTitleTheGreatest() {
+        Video video = videoRepository.findVideoByUrl("url2000");
+        assertEquals("The Greatest", video.getTitle());
+    }
 
-        assertEquals(video, video1, "ERROR: Video was not identical");
+    @Test
+    void findVideoByUrlShouldReturnVideoWithIdTwo() {
+        Video video = videoRepository.findVideoByUrl("url2001");
+        assertEquals(2, video.getId());
+    }
+
+    @Test
+    void findVideoByUrlShouldReturnNullWhenUrlDoesNotExist() {
+        Video video = videoRepository.findVideoByUrl("url9999");
+        assertNull(video);
     }
 }

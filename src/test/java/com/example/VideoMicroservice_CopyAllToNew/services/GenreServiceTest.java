@@ -6,11 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -28,7 +26,7 @@ class GenreServiceTest {
     }
 
     @Test
-    void genreExistsShouldReturnTrue() {
+    void genreExistsShouldReturnTrueWhenExists() {
         Genre existingGenre = new Genre("Rock");
 
         when(genreRepositoryMock.findGenreByGenre("Rock")).thenReturn(existingGenre);
@@ -41,7 +39,7 @@ class GenreServiceTest {
     }
 
     @Test
-    void genreExistsShouldReturnFalse() {
+    void genreExistsShouldReturnFalseWhenNotExists() {
         when(genreRepositoryMock.findGenreByGenre("Rock")).thenReturn(null);
 
         boolean genreDoesNotExist = genreService.genreExists("Rock");
@@ -52,7 +50,7 @@ class GenreServiceTest {
     }
 
     @Test
-    void findAllGenres() {
+    void findAllGenresShouldReturnAllGenres() {
         List<Genre> genreList = Arrays.asList(new Genre("Rock"), new Genre("RNB"), new Genre("Heavy Metal"));
 
         when(genreRepositoryMock.findAll()).thenReturn(genreList);
@@ -65,7 +63,7 @@ class GenreServiceTest {
     }
 
     @Test
-    void findGenreByName() {
+    void findGenreByNameShouldReturnGenreWhenExists() {
         Genre genre = new Genre("Rock");
 
         when(genreRepositoryMock.findGenreByGenre("Rock")).thenReturn(genre);
@@ -78,7 +76,7 @@ class GenreServiceTest {
     }
 
     @Test
-    void findGenreById() {
+    void findGenreByIdShouldReturnGenreWhenExists() {
         long genreId = 1;
         Genre genre = new Genre("Rock");
         genre.setId(genreId);
@@ -108,6 +106,20 @@ class GenreServiceTest {
     @Test
     void createGenreNoGenreShouldReturnException() {
         Genre genre = new Genre("");
+
+        ResponseStatusException result = assertThrows(ResponseStatusException.class, () -> {
+            genreService.create(genre);
+        }, "ERROR: Exception was not thrown");
+
+        assertEquals("ERROR: Genre not provided", result.getReason(), "ERROR: Exceptions was not identical");
+        assertEquals(HttpStatus.NOT_ACCEPTABLE, result.getStatusCode(), "ERROR: Status Codes was not identical");
+
+        verify(genreRepositoryMock, never()).save(genre);
+    }
+
+    @Test
+    void createGenreNullGenreShouldReturnException() {
+        Genre genre = new Genre(null);
 
         ResponseStatusException result = assertThrows(ResponseStatusException.class, () -> {
             genreService.create(genre);
@@ -186,7 +198,7 @@ class GenreServiceTest {
     }
 
     @Test
-    void deleteShouldReturnException() {
+    void deleteShouldReturnExceptionWhenIdNotFound() {
         long genreId = 1;
 
         when(genreRepositoryMock.findById(genreId)).thenReturn(Optional.empty());
@@ -203,7 +215,7 @@ class GenreServiceTest {
     }
 
     @Test
-    void countPlay() {
+    void countPlayShouldIncreaseTotalPlaysWithOne() {
         Genre genre = new Genre("Rock");
         genre.setTotalPlays(0);
 
@@ -215,7 +227,7 @@ class GenreServiceTest {
     }
 
     @Test
-    void addLike() {
+    void addLikeShouldIncreaseLikeWithOne() {
         Genre genre = new Genre("Rock");
         genre.setTotalLikes(0);
 

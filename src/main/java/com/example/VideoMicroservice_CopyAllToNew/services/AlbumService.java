@@ -16,26 +16,26 @@ public class AlbumService implements AlbumServiceInterface {
         this.albumRepository = albumRepository;
     }
 
-    // READ - Get all albums
+    // READ - Get All Albums
     @Override
     public List<Album> getAllAlbums() {
         return albumRepository.findAll();
     }
 
-    // READ - Get an album by name
+    // READ - Get An Album By Name
     @Override
     public Album getAlbumByName(String name) {
         Optional<Album> optionalAlbum = albumRepository.findByNameIgnoreCase(name);
         return optionalAlbum.orElse(null);
     }
 
-    // READ - Check if album exits
+    // READ - Check If Album Exits
     @Override
     public boolean albumExists(String name) {
         return albumRepository.existsByNameIgnoreCase(name);
     }
 
-    // CREATE - Create a new album
+    // CREATE - Create A New Album
     @Override
     public Album createAlbum(Album album) {
         return albumRepository.save(album);

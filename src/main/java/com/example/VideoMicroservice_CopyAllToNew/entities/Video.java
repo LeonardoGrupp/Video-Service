@@ -12,6 +12,7 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    // Attributes
     private String type;
     @Column(nullable = false, length = 250)
     private String title;
@@ -25,9 +26,9 @@ public class Video {
 
     @ManyToMany
     @JoinTable(
-            name = "videos_genres", // Name of the join table
-            joinColumns = @JoinColumn(name = "videos_id"), // Foreign key in join table pointing to 'video' table
-            inverseJoinColumns = @JoinColumn(name = "genre_id") // Foreign key in join table pointing to 'genres' table
+            name = "videos_genres",                                 // Name of the join table
+            joinColumns = @JoinColumn(name = "videos_id"),          // Foreign key in join table pointing to 'video' table
+            inverseJoinColumns = @JoinColumn(name = "genre_id")     // Foreign key in join table pointing to 'genres' table
     )
     private List<Genre> genres;
 
@@ -47,6 +48,7 @@ public class Video {
     )
     private List<Artist> artists;
 
+    // Constructors
     public Video() {
     }
 
@@ -76,6 +78,7 @@ public class Video {
         this.artists = artists;
     }
 
+    // Getters & Setters
     public long getId() {
         return id;
     }
