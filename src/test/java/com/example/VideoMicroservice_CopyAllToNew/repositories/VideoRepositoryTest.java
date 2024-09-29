@@ -1,4 +1,3 @@
-/*
 package com.example.VideoMicroservice_CopyAllToNew.repositories;
 
 import com.example.VideoMicroservice_CopyAllToNew.entities.Video;
@@ -20,16 +19,26 @@ class VideoRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        videoRepository.save(new Video("The Way I Am", "url99", "2002-02-22");
-        Video rnb1 = new Video("Cheer (Drink to That", "url3", "2009-07-14");
-        Video rnb2 = new Video("Diamonds", "url4", "2010-06-02");
-
+        videoRepository.save(new Video("The Greatest", "url2000", "2016"));
+        Video video = new Video("Kickstart My Heart", "url2001", "1990");
+        videoRepository.save(video);
     }
 
     @Test
-    void findMusicByUrlShouldReturnMusic() {
-        Video video = videoRepository.findVideoByUrl("url99");
-
-        assertEquals(video, video1, "ERROR: Video was not identical");
+    void findVideoByUrlShouldReturnVideoWithTitleTheGreatest() {
+        Video video = videoRepository.findVideoByUrl("url2000");
+        assertEquals("The Greatest", video.getTitle());
     }
-}*/
+
+    @Test
+    void findVideoByUrlShouldReturnVideoWithIdTwo() {
+        Video video = videoRepository.findVideoByUrl("url2001");
+        assertEquals(2, video.getId());
+    }
+
+    @Test
+    void findVideoByUrlShouldReturnNullWhenUrlDoesNotExist() {
+        Video video = videoRepository.findVideoByUrl("url9999");
+        assertNull(video);
+    }
+}

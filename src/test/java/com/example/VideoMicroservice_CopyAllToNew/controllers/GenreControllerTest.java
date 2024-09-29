@@ -1,4 +1,3 @@
-/*
 package com.example.VideoMicroservice_CopyAllToNew.controllers;
 
 import com.example.VideoMicroservice_CopyAllToNew.entities.Genre;
@@ -8,10 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -35,7 +33,7 @@ class GenreControllerTest {
         ResponseEntity<List<Genre>> result = genreController.getAllGenres();
 
         assertEquals(genreList, result.getBody(), "ERROR: Lists was not identical");
-        assertEquals("Rock", result.getBody().get(0).getGenre());
+        assertEquals("Rock", Objects.requireNonNull(result.getBody()).get(0).getGenre());
 
         verify(genreServiceMock).findAllGenres();
     }
@@ -48,7 +46,7 @@ class GenreControllerTest {
 
         ResponseEntity<Genre> result = genreController.createGenre(genre);
 
-        assertEquals("Rock", result.getBody().getGenre(), "ERROR: Gernes was not identical");
+        assertEquals("Rock", Objects.requireNonNull(result.getBody()).getGenre(), "ERROR: Gernes was not identical");
 
         verify(genreServiceMock).create(genre);
     }
@@ -98,7 +96,7 @@ class GenreControllerTest {
 
         ResponseEntity<Genre> response = genreController.updateGenre(existingGenreId, newInfo);
 
-        assertEquals("RNB", response.getBody().getGenre(), "ERROR: Genres was not identical");
+        assertEquals("RNB", Objects.requireNonNull(response.getBody()).getGenre(), "ERROR: Genres was not identical");
 
         verify(genreServiceMock).update(existingGenreId, newInfo);
     }
@@ -111,8 +109,8 @@ class GenreControllerTest {
 
         ResponseEntity<String> response = genreController.deleteGenre(genreId);
 
-        assertEquals("Genre deleted", response.getBody().toString(), "ERROR: Strings was not identical");
+        assertEquals("Genre deleted", response.getBody(), "ERROR: Strings was not identical");
 
         verify(genreServiceMock).delete(genreId);
     }
-}*/
+}

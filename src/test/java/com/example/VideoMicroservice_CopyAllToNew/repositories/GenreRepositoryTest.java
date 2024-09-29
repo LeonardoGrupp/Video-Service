@@ -19,13 +19,13 @@ class GenreRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        genreRepository.save(new Genre("Rock"));     // Alt 1
-        Genre genre = new Genre("Pop");              // Alt 2
+        genreRepository.save(new Genre("Rock"));
+        Genre genre = new Genre("Pop");
         genreRepository.save(genre);
     }
 
     @Test
-    void findGenreByGenreShouldReturnTrueWhenPopExits() {
+    void findGenreByGenreShouldReturnPop() {
         Genre response = genreRepository.findGenreByGenre("Pop");
         assertEquals(response.getGenre(), "Pop");
     }
