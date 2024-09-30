@@ -179,7 +179,7 @@ public class Video {
         this.likes += 1;
     }
 
-    public void resetLies() {
+    public void resetLikes() {
         this.likes = 0;
     }
 
