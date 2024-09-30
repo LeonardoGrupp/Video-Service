@@ -1,4 +1,3 @@
-
 INSERT INTO genres (id, genre, type, total_likes, total_plays)
 VALUES
     (20, 'Heavy Metal', 'video', 0,0),
